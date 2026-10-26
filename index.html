@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Professional profile of Reidan Beachill, Internal Security Lead focused on Microsoft 365, Zero Trust, and infrastructure automation.">
+<meta name="description" content="Professional profile of Reidan Beachill, CISSP, Internal Security Lead focused on identity-first architecture, privileged access and security engineering.">
 <title>Reidan Beachill</title>
 <link href="asset/css/bootstrap.min.css" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="asset/img/favicon.svg">
@@ -114,16 +114,12 @@ margin-top: 0;
 
 .work-grid {
 display: grid;
-grid-template-columns: repeat(2, 1fr);
+grid-template-columns: repeat(3, 1fr);
 gap: .9rem;
 align-items: stretch;
 }
 
-.work-card-wide {
-grid-column: 1 / -1;
-}
-
-@media (max-width: 480px) {
+@media (max-width: 768px) {
 .work-grid {
 grid-template-columns: 1fr;
 }
@@ -161,11 +157,84 @@ margin: 0 0 .3rem;
 color: #f8fafc;
 }
 
+.work-card-title {
+display: flex;
+align-items: center;
+gap: .45rem;
+}
+
+.work-card-logo {
+height: 1.1em;
+width: auto;
+}
+
 .work-card p {
 margin: 0;
 font-size: .95rem;
 line-height: 1.5;
 color: #c7d2da;
+}
+
+.work-card p + p {
+margin-top: .4rem;
+}
+
+.card-cta {
+margin-top: auto;
+padding-top: .6rem;
+font-size: .88rem;
+font-weight: 600;
+color: #7dd3fc;
+}
+
+.work-card-featured {
+height: auto;
+margin-bottom: .9rem;
+border-color: rgba(56, 189, 248, .4);
+background: rgba(30, 41, 59, .65);
+}
+
+.work-card-featured h3 {
+font-size: 1.2rem;
+}
+
+.work-card .featured-label {
+font-size: .75rem;
+font-weight: 600;
+letter-spacing: .08em;
+text-transform: uppercase;
+color: #7dd3fc;
+margin-bottom: .35rem;
+}
+
+.card-links {
+display: flex;
+flex-wrap: wrap;
+gap: .45rem;
+margin-top: .9rem;
+}
+
+.card-links .btn-hero {
+font-size: .88rem;
+}
+
+.focus-grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 1.2rem;
+}
+
+.focus-heading {
+font-size: .95rem;
+font-weight: 600;
+margin-bottom: .3rem;
+color: #7dd3fc;
+}
+
+@media (max-width: 576px) {
+.focus-grid {
+grid-template-columns: 1fr;
+}
 }
 
 .button-row {
@@ -263,7 +332,7 @@ padding-bottom: 1.5rem;
 <main class="px-3 main-content">
 <p class="lead"><img src="asset/img/headShot.png" class="img-fluid rounded-circle profile-img" alt="Profile Head Shot"></p>
 <h1>Reidan Beachill</h1>
-<h6 class="hero-subtitle">Internal Security Lead at BCN, a Microsoft Solutions Partner with all six designations, specialising in Microsoft 365, Zero Trust architecture, and infrastructure automation within MSP environments.</h6>
+<h6 class="hero-subtitle">CISSP-certified Internal Security Lead at BCN, specialising in identity-first architecture, privileged access and security engineering across Microsoft cloud and MSP environments. I design, build and validate security controls, with a particular interest in trust boundaries, infrastructure security and automation.</h6>
 <div class="button-row" role="group" aria-label="Profile links">
 <a class="btn-hero btn-hero-primary" href="https://reidanb.gitbook.io/home" aria-label="GitBook Blog">
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-journal-text" viewBox="0 0 16 16">
@@ -297,28 +366,64 @@ padding-bottom: 1.5rem;
 <div class="profile-main">
 <section class="section-block" aria-labelledby="what-i-do-heading">
 <h2 id="what-i-do-heading">What I Do</h2>
+<div class="focus-grid">
+<div>
+<h3 class="focus-heading">Security leadership</h3>
 <ul class="what-i-do">
-<li>Designing and enforcing Zero Trust access models (Entra ID, Conditional Access, PIM)</li>
-<li>Building automation and internal tooling (PowerShell, Go, scripting)</li>
-<li>Securing MSP and multi-tenant environments</li>
-<li>Running tabletop exercises and security scenario design</li>
+<li>Identity-first Zero Trust architecture across Entra ID, Conditional Access and PIM</li>
+<li>Privileged access enforcement and identity assurance in multi-tenant MSP environments</li>
+<li>Tabletop exercises and security scenario design</li>
 </ul>
+</div>
+<div>
+<h3 class="focus-heading">Security engineering</h3>
+<ul class="what-i-do">
+<li>Engineering secure management planes for Linux infrastructure</li>
+<li>Hardware-backed trust: SSH certificate issuance from an isolated signing device</li>
+<li>Automation and internal tooling in Go and PowerShell</li>
+</ul>
+</div>
+</div>
+</section>
+
+<section class="section-block" aria-labelledby="certifications-heading">
+<h2 id="certifications-heading">Certifications</h2>
+<a class="work-card work-card-solo" href="https://my.isc2.org/s/MemberVerification" aria-label="Verify CISSP certification with ISC2">
+<h3>CISSP &mdash; Certified Information Systems Security Professional</h3>
+<p>ISC2 &middot; Certified October 2026 &middot; ID 5123996</p>
+<span class="card-cta">Verify with ISC2 (last name &ldquo;Beachill&rdquo;) &rarr;</span>
+</a>
 </section>
 
 <section class="section-block" aria-labelledby="selected-work-heading">
 <h2 id="selected-work-heading">Selected Work</h2>
+<article class="work-card work-card-featured" aria-labelledby="vitrinode-heading">
+<p class="featured-label">Featured project</p>
+<h3 id="vitrinode-heading" class="work-card-title"><img src="asset/img/vitrinode-mark-white.svg" class="work-card-logo" alt="" aria-hidden="true">Vitrinode</h3>
+<p>Security-focused management plane for Linux infrastructure, in development towards v1.0. Agents connect outbound-only over mutual TLS; remote operations are typed, signed, expiring jobs; and a separate privileged executor verifies each job itself, so a compromised network-facing agent doesn&rsquo;t gain root.</p>
+<p>Alongside it: Vitrinode-HSM, a prototype hardware signing authority on the Raspberry Pi Pico 2 (RP2350) that uses TrustZone-M isolation to issue SSH user certificates without the CA key leaving the device.</p>
+<div class="card-links" role="group" aria-label="Vitrinode links">
+<a class="btn-hero btn-hero-primary" href="https://vitrinode.com/">Visit website</a>
+<a class="btn-hero" href="https://vitrinode.com/architecture">View architecture</a>
+<a class="btn-hero" href="https://vitrinode.com/security">Security model</a>
+<a class="btn-hero" href="https://vitrinode.com/hsm">Hardware signing (HSM)</a>
+</div>
+</article>
 <div class="work-grid">
 <a class="work-card" href="https://reidanb.gitbook.io/home" aria-label="Technical Blog and Labs">
 <h3>Technical Blog &amp; Labs</h3>
 <p>Write-ups on networking labs, security research, infrastructure experiments, and practical security engineering.</p>
+<span class="card-cta">Read technical write-ups &rarr;</span>
 </a>
 <a class="work-card" href="https://github.com/reidanb" aria-label="Projects and Tooling">
 <h3>Projects &amp; Tooling</h3>
 <p>Automation tooling, infrastructure code, and hands-on engineering projects.</p>
+<span class="card-cta">Browse GitHub &rarr;</span>
 </a>
-<a class="work-card work-card-wide" href="https://github.com/reidanb/spoolify" aria-label="Spoolify repository">
+<a class="work-card" href="https://github.com/reidanb/spoolify" aria-label="Spoolify repository">
 <h3>Spoolify</h3>
 <p>High-performance Spotify analytics tool built with Python and SQLite, focused on fast ingestion, deterministic analysis, and local-first processing.</p>
+<span class="card-cta">Explore repository &rarr;</span>
 </a>
 </div>
 </section>
@@ -328,6 +433,7 @@ padding-bottom: 1.5rem;
 <a class="work-card work-card-solo" href="https://afbh.org.uk/" aria-label="Action for Barnsley Homeless">
 <h3>Action for Barnsley Homeless</h3>
 <p>Volunteer supporting a community initiative providing meals, clothing, and support to those in need. Also built and maintain the website.</p>
+<span class="card-cta">Visit site &rarr;</span>
 </a>
 </section>
 </div>
