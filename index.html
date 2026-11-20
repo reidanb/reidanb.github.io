@@ -365,6 +365,135 @@ padding-bottom: 1.5rem;
 }
 }
 </style>
+<script>
+/* DevTools console easter egg: a slowly rotating 3D Enter Shikari emblem.
+   The rotation is precomputed once (perspective projection) into SMIL keyframes inside
+   an SVG, which is logged a single time as a console background image, so the console
+   gets two entries in total and is never cleared or redrawn. */
+window.addEventListener('load', function () {
+  var LYRIC = [
+    '%c“The present is the past that we cannot shed.”\n%c— Enter Shikari, T.I.N.A.',
+    'color:#ffb3ba;font-style:italic;font-family:Georgia,serif;font-size:13px;line-height:1.7',
+    'color:#b8737c;font-family:monospace;font-size:11px;line-height:1.7'
+  ];
+
+  function ascii() {
+    console.log('%c' + String.raw`
+________________________________
+\              /\              /
+ \            /  \            /
+  \          /    \          /
+   \        /      \        /
+    \      /        \      /
+     \    /          \    /
+      \  /            \  /
+       \/______________\/
+        \              /
+         \            /
+          \          /
+           \        /
+            \      /
+             \    /
+              \  /
+               \/
+`, 'color:#ff4d5e;font-family:monospace;font-weight:bold;line-height:1.1;text-shadow:0 0 6px #ff4d5e');
+  }
+
+  function emblem(still) {
+    var W = 300, H = 270, SCALE = 104, CAM = 7, TILT = 0.3, HALF_DEPTH = 0.16;
+    var FRAMES = still ? 1 : 72, DUR = '36s';
+    var r3 = Math.sqrt(3), lift = r3 / 6;
+    /* Down-pointing triangle, side 2, centred on its bounding box. */
+    function corner(x, y, s) { return [x * s, (y + lift) * s - lift * (s - 1)]; }
+    function tri(s) { return [corner(-1, r3 / 3, s), corner(1, r3 / 3, s), corner(0, -2 * r3 / 3, s)]; }
+    function mid(p, q) { return [(p[0] + q[0]) / 2, (p[1] + q[1]) / 2]; }
+    function lerp(p, q, t) { return [p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t]; }
+    function at(p, z) { return [p[0], p[1], z]; }
+    function onFace(pts, z) { return pts.map(function (p) { return at(p, z); }); }
+
+    var F = -HALF_DEPTH, B = HALF_DEPTH;            /* front / back face z */
+    var outer = tri(1), inner = tri(0.8), led = tri(0.9);
+    var m1 = mid(inner[0], inner[1]), m2 = mid(inner[1], inner[2]), m3 = mid(inner[2], inner[0]);
+
+    function project(p, a) {
+      var c = Math.cos(a), s = Math.sin(a), ct = Math.cos(TILT), st = Math.sin(TILT);
+      var x = p[0] * c + p[2] * s, z = -p[0] * s + p[2] * c;
+      var y = p[1] * ct - z * st; z = p[1] * st + z * ct;
+      var k = CAM / (CAM + z);
+      return [W / 2 + x * k * SCALE, H / 2 - y * k * SCALE, z];
+    }
+    function r1(n) { return Math.round(n * 10) / 10; }
+    function depthAlpha(z) { return Math.max(0.25, Math.min(1, 0.62 - z * 0.45)); }
+
+    /* Each shape: 3D points + how bright it is; brightness may depend on the face angle. */
+    var shapes = [];
+    function add(tag, pts, attrs, alpha) { shapes.push({ tag: tag, pts: pts, attrs: attrs, alpha: alpha }); }
+    function facing(a) { return Math.abs(Math.cos(a) * Math.cos(TILT)); }
+
+    /* Panels: three down-pointing, the centre one left dark; the right one lit, as in the light-up emblem. */
+    add('polygon', onFace([inner[0], m1, m3], F), 'fill="#ff4d5e"', function (a) { return 0.1 + 0.12 * facing(a); });
+    add('polygon', onFace([m1, inner[1], m2], F), 'fill="#ffc2c8"', function (a) { return 0.2 + 0.45 * facing(a); });
+    add('polygon', onFace([m3, m2, inner[2]], F), 'fill="#ff4d5e"', function (a) { return 0.07 + 0.1 * facing(a); });
+
+    var line = 'fill="none" stroke="#ff4d5e" stroke-linejoin="round"';
+    add('polygon', onFace(outer, B), line + ' stroke-width="1.2"', null);
+    for (var i = 0; i < 3; i++) add('polyline', [at(outer[i], F), at(outer[i], B)], line + ' stroke-width="1"', null);
+    add('polygon', onFace(outer, F), line + ' stroke-width="2"', null);
+    add('polygon', onFace(inner, F), line + ' stroke-width="1.3"', null);
+    add('polygon', onFace([m1, m2, m3], F), line + ' stroke-width="1.3"', null);
+
+    /* LED dots around the frame. */
+    for (var e = 0; e < 3; e++) {
+      for (var j = 0; j < 8; j++) {
+        add('circle', [at(lerp(led[e], led[(e + 1) % 3], (j + 0.5) / 8), F)], 'r="1.5" fill="#ff7a86"', null);
+      }
+    }
+
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '">' +
+      '<defs><filter id="g" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="2" result="b"/>' +
+      '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g filter="url(#g)">';
+
+    shapes.forEach(function (sh) {
+      var geo = [], cx = [], cy = [], op = [];
+      for (var f = 0; f <= FRAMES; f++) {
+        var a = still ? -0.6 : (f / FRAMES) * Math.PI * 2;
+        var pr = sh.pts.map(function (p) { return project(p, a); });
+        var zAvg = pr.reduce(function (s, p) { return s + p[2]; }, 0) / pr.length;
+        op.push(r1((sh.alpha ? sh.alpha(a) : depthAlpha(zAvg)) * 100) / 100);
+        if (sh.tag === 'circle') { cx.push(r1(pr[0][0])); cy.push(r1(pr[0][1])); }
+        else geo.push(pr.map(function (p) { return r1(p[0]) + ',' + r1(p[1]); }).join(' '));
+        if (still) break;
+      }
+      function anim(attr, vals) {
+        return still ? '' : '<animate attributeName="' + attr + '" dur="' + DUR + '" repeatCount="indefinite" values="' + vals.join(';') + '"/>';
+      }
+      var opAttr = sh.alpha && sh.attrs.indexOf('fill="#') === 0 ? 'fill-opacity' : 'opacity';
+      if (sh.tag === 'circle') {
+        svg += '<circle cx="' + cx[0] + '" cy="' + cy[0] + '" ' + opAttr + '="' + op[0] + '" ' + sh.attrs + '>' +
+          anim('cx', cx) + anim('cy', cy) + anim(opAttr, op) + '</circle>';
+      } else {
+        svg += '<' + sh.tag + ' points="' + geo[0] + '" ' + opAttr + '="' + op[0] + '" ' + sh.attrs + '>' +
+          anim('points', geo) + anim(opAttr, op) + '</' + sh.tag + '>';
+      }
+    });
+    svg += '</g></svg>';
+
+    console.log('%c ', 'font-size:1px;line-height:1px;padding:' + (H / 2) + 'px ' + (W / 2) + 'px;' +
+      'background:url("data:image/svg+xml;base64,' + btoa(svg) + '") no-repeat center;background-size:' + W + 'px ' + H + 'px');
+  }
+
+  try {
+    /* Firefox's console strips background images from %c styles, leaving an empty row. */
+    if (/firefox/i.test(navigator.userAgent)) throw 0;
+    if (typeof SVGAnimateElement === 'undefined' || typeof btoa !== 'function') throw 0;
+    var still = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    emblem(still);
+  } catch (err) {
+    ascii();
+  }
+  console.log.apply(console, LYRIC);
+});
+</script>
 </head>
 <body class="d-flex text-center text-bg-dark">
 <div class="cover-container d-flex w-100 min-vh-100 p-3 mx-auto flex-column">
