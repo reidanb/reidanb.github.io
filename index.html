@@ -465,10 +465,11 @@ padding-bottom: 1.5rem;
 <span class="card-cta">Explore repository &rarr;</span>
 </a>
 </div>
-<a class="work-card work-card-hamster" href="https://athena.beachill.net/" aria-label="Athena's Wheel: live hamster wheel stats">
+<a class="work-card work-card-hamster" href="https://athena.beachill.net/" aria-label="Athena's Wheel: nightly hamster wheel stats">
 <h3 class="work-card-title"><span class="hamster-emoji" aria-hidden="true">&#x1F439;</span>Athena&rsquo;s Wheel</h3>
 <p>Custom firmware in C for a Raspberry Pi Pico 2 W on my hamster Athena&rsquo;s wheel. An IR optical sensor reads 12 marks per turn as an encoder, and the Pico works out her speed, distance and running bouts, logs them to flash and takes authenticated A/B firmware updates over the LAN, rolling back if a new image fails to boot.</p>
-<span class="card-cta">See her live stats &rarr;</span>
+<p>The Pico pushes its data to a history service in Docker on my Proxmox homelab. A separate container with no network access turns completed nights into a static summary, and a locked-down nginx container serves it publicly through a reverse proxy and Cloudflare. The public page never shows live data or times of day, so it can&rsquo;t reveal when the house is empty.</p>
+<span class="card-cta">See how far she ran last night &rarr;</span>
 </a>
 </section>
 
