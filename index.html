@@ -276,6 +276,45 @@ background: #16a34a;
 color: #06110a;
 }
 
+.work-card-hamster {
+height: auto;
+margin-top: .9rem;
+border: 1px dashed #f9a8d4;
+background: linear-gradient(135deg, rgba(251, 207, 232, .12), rgba(253, 230, 138, .10));
+}
+
+.work-card-hamster:hover {
+border-color: #fbcfe8;
+}
+
+.work-card-hamster h3 {
+color: #fce7f3;
+}
+
+.work-card-hamster .card-cta {
+color: #f9a8d4;
+}
+
+.hamster-emoji {
+display: inline-block;
+}
+
+.work-card-hamster:hover .hamster-emoji {
+animation: hamster-wiggle .5s ease-in-out infinite;
+}
+
+@keyframes hamster-wiggle {
+0%, 100% { transform: rotate(0deg); }
+25% { transform: rotate(-14deg); }
+75% { transform: rotate(14deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+.work-card-hamster:hover .hamster-emoji {
+animation: none;
+}
+}
+
 footer {
 margin-top: 1.2rem;
 padding: .8rem 0 1.3rem;
@@ -426,6 +465,11 @@ padding-bottom: 1.5rem;
 <span class="card-cta">Explore repository &rarr;</span>
 </a>
 </div>
+<a class="work-card work-card-hamster" href="https://athena.beachill.net/" aria-label="Athena's Wheel: live hamster wheel stats">
+<h3 class="work-card-title"><span class="hamster-emoji" aria-hidden="true">&#x1F439;</span>Athena&rsquo;s Wheel</h3>
+<p>Custom firmware in C for a Raspberry Pi Pico 2 W on my hamster Athena&rsquo;s wheel. An IR optical sensor reads 12 marks per turn as an encoder, and the Pico works out her speed, distance and running bouts, logs them to flash and takes authenticated A/B firmware updates over the LAN, rolling back if a new image fails to boot.</p>
+<span class="card-cta">See her live stats &rarr;</span>
+</a>
 </section>
 
 <section class="section-block" aria-labelledby="community-heading">
